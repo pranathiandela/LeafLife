@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}AI Crop Assistant - LeafLife{% endblock %}
+{% block content %}
+
+<div class="assistant-layout">
+
+    <!-- Sidebar -->
+    <div class="chat-sidebar" id="chatSidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-robot"></i> LeafLife AI</h3>
+            <button class="btn btn-primary btn-sm" onclick="newChat()">
+                <i class="fas fa-plus"></i> New Chat
+            </button>
+        </div>
+        <div class="sidebar-desc">
+            Ask anything about crop diseases, treatments, farming tips, and more.
+        </div>
+        <div class="chat-list" id="chatList">
+            {% for chat in chats %}
+            <div class="chat-list-item" id="chat-{{ chat.id }}" onclick="loadChat({{ chat.id }}, '{{ chat.title | replace("'", "\\'") }}')">
+                <i class="fas fa-comment-dots"></i>
+                <div class="chat-list-title">{{ chat.title[:40] }}{% if chat.title|length > 40 %}...{% endif %}</div>
+                <span class="chat-list-date">{{ chat.created_at[:10] if chat.created_at else '' }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Suggested Questions -->
+        <div class="sidebar-suggestions">
+            <div class="suggestions-title">Suggested Questions</div>
+            <div class="suggestion-chip" onclick="askSuggestion('What causes early blight in tomatoes?')">🍅 Early blight in tomatoes?</div>
+            <div class="suggestion-chip" onclick="askSuggestion('How to prevent late blight in potatoes?')">🥔 Prevent potato late blight?</div>
+            <div class="suggestion-chip" onclick="askSuggestion('Best organic treatment for leaf spot disease?')">🌿 Organic leaf spot treatment?</div>
+            <div class="suggestion-chip" onclick="askSuggestion('What fertilizer is best for wheat in India?')">🌾 Best fertilizer for wheat?</div>
+            <div class="suggestion-chip" onclick="askSuggestion('How to control whiteflies on chilli plants?')">🌶️ Whitefly control on chilli?</div>
+            <div class="suggestion-chip" onclick="askSuggestion('PM Kisan scheme eligibility and benefits')">🏛️ PM Kisan scheme details?</div>
+        </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+        <div class="chat-topbar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="chat-topbar-title">
+                <div class="ai-status-dot"></div>
+                <span id="chatTitle">LeafLife AI Crop Assistant</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="clearChat()"><i class="fas fa-trash"></i> Clear</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Welcome -->
+            <div class="welcome-msg" id="welcomeMsg">
+                <div class="welcome-icon"><i class="fas fa-robot"></i></div>
+                <h2>LeafLife AI Crop Assistant</h2>
+                <p>Ask me anything about crop diseases, treatments, prevention methods, farming practices, and more. I'm here to help Indian farmers grow healthier crops!</p>
+                <div class="welcome-chips">
+                    <div class="suggestion-chip" onclick="askSuggestion('What are the common diseases of tomato plants?')">Tomato diseases</div>
+                    <div class="suggestion-chip" onclick="askSuggestion('How do I identify rice brown spot disease?')">Rice brown spot</div>
+                    <div class="suggestion-chip" onclick="askSuggestion('Neem oil spray preparation and usage for crops')">Neem oil spray</div>
+                    <div class="suggestion-chip" onclick="askSuggestion('How can I improve soil health for better yields?')">Soil health tips</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-wrap">
+            <div class="chat-input-box">
+                <textarea id="chatInput" placeholder="Ask about crop diseases, treatments, farming tips..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="chat-input-hint">
+                <i class="fas fa-info-circle"></i>
+                Powered by Claude AI · Press Enter to send, Shift+Enter for new line
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/assistant.js') }}"></script>
+{% endblock %}

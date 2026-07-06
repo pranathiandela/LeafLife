@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block title %}Detection - LeafLife{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div class="container">
+        <h1><i class="fas fa-microscope"></i> Detect Crop Disease</h1>
+        <p>Upload a clear image of the affected leaf for accurate AI-powered analysis</p>
+    </div>
+</div>
+
+<div class="container detection-container">
+
+    <!-- Upload Section -->
+    <div id="uploadSection" class="upload-section card">
+        <h2 class="section-title-sm">Upload Leaf Image</h2>
+        <p class="section-sub">Drag & drop or browse to select a leaf image from your device</p>
+
+        <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon-wrap" id="uploadIconWrap">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="upload-hint">Drag & drop an image here</p>
+            <p class="upload-or">— or —</p>
+            <label for="fileInput" class="btn btn-primary">
+                <i class="fas fa-folder-open"></i> Choose Image
+            </label>
+            <input type="file" id="fileInput" accept="image/*" hidden>
+            <p class="upload-formats">JPG, PNG, JPEG &nbsp;|&nbsp; Max: 16MB</p>
+        </div>
+
+        <div class="upload-preview" id="uploadPreview" style="display:none">
+            <img id="previewImg" src="" alt="Preview">
+            <div class="preview-info">
+                <div class="preview-filename" id="previewFilename"></div>
+                <div class="preview-size" id="previewSize"></div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="clearUpload()">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+
+        <div class="upload-actions" id="uploadActions" style="display:none">
+            <button class="btn btn-primary btn-lg" id="analyzeBtn" onclick="analyzeImage()">
+                <i class="fas fa-search"></i> Analyze Image
+            </button>
+        </div>
+
+        <div class="upload-tips">
+            <h4><i class="fas fa-lightbulb"></i> Tips for better results</h4>
+            <ul>
+                <li><i class="fas fa-check-circle"></i> Upload clear, well-lit leaf images</li>
+                <li><i class="fas fa-check-circle"></i> Avoid blurry or low-light images</li>
+                <li><i class="fas fa-check-circle"></i> Capture both sides of the leaf if possible</li>
+                <li><i class="fas fa-check-circle"></i> Focus on the most affected area of the leaf</li>
+            </ul>
+        </div>
+
+        <!-- Photo Guide Toggle -->
+        <button class="photo-guide-toggle" onclick="togglePhotoGuide()">
+            <i class="fas fa-camera"></i>
+            <span>How to take the perfect leaf photo for best accuracy</span>
+            <i class="fas fa-chevron-down" id="guideChevron"></i>
+        </button>
+
+        <!-- Photo Guide Content -->
+        <div class="photo-guide" id="photoGuide" style="display:none">
+            <div class="photo-guide-intro">
+                <i class="fas fa-info-circle"></i>
+                <p>For the most accurate AI diagnosis, photograph the leaf the same way our training images were captured — isolated against a plain background, not while still attached to the plant.</p>
+            </div>
+
+            <div class="photo-examples">
+                <div class="photo-example good">
+                    <div class="example-badge good-badge"><i class="fas fa-check"></i> Best for Accuracy</div>
+                    <svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" class="example-svg">
+                        <rect width="220" height="180" rx="12" fill="#f3f4f6"/>
+                        <rect x="10" y="10" width="200" height="160" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
+                        <ellipse cx="110" cy="90" rx="65" ry="55" fill="#4ade80" transform="rotate(-10 110 90)"/>
+                        <path d="M110 145 Q110 90 110 35" stroke="#16a34a" stroke-width="3" fill="none"/>
+                        <path d="M110 110 Q85 90 75 65" stroke="#16a34a" stroke-width="2" fill="none"/>
+                        <path d="M110 110 Q135 90 145 65" stroke="#16a34a" stroke-width="2" fill="none"/>
+                        <path d="M110 80 Q95 65 88 50" stroke="#16a34a" stroke-width="1.5" fill="none"/>
+                        <path d="M110 80 Q125 65 132 50" stroke="#16a34a" stroke-width="1.5" fill="none"/>
+                        <circle cx="90" cy="75" r="4" fill="#f59e0b" opacity="0.8"/>
+                        <circle cx="130" cy="100" r="3" fill="#ef4444" opacity="0.8"/>
+                    </svg>
+                    <div class="example-caption">
+                        <strong>Single leaf, plain background</strong>
+                        <p>Place leaf on white/gray paper, fill the frame, even lighting, flat angle</p>
+                    </div>
+                </div>
+
+                <div class="photo-example bad">
+                    <div class="example-badge bad-badge"><i class="fas fa-times"></i> Lower Accuracy</div>
+                    <svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" class="example-svg">
+                        <rect width="220" height="180" rx="12" fill="#dcfce7"/>
+                        <rect x="0" y="120" width="220" height="60" fill="#86efac"/>
+                        <ellipse cx="60" cy="70" rx="35" ry="28" fill="#22c55e" transform="rotate(-20 60 70)"/>
+                        <ellipse cx="120" cy="50" rx="40" ry="30" fill="#4ade80" transform="rotate(10 120 50)"/>
+                        <ellipse cx="170" cy="90" rx="32" ry="26" fill="#22c55e" transform="rotate(-5 170 90)"/>
+                        <ellipse cx="90" cy="110" rx="38" ry="28" fill="#4ade80" transform="rotate(15 90 110)"/>
+                        <line x1="60" y1="160" x2="60" y2="100" stroke="#854d0e" stroke-width="4"/>
+                        <line x1="150" y1="160" x2="150" y2="110" stroke="#854d0e" stroke-width="4"/>
+                    </svg>
+                    <div class="example-caption">
+                        <strong>Leaf on plant, busy background</strong>
+                        <p>Multiple leaves, soil, and natural light reduce AI confidence</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="photo-guide-steps">
+                <div class="guide-step">
+                    <div class="guide-step-num">1</div>
+                    <div>
+                        <strong>Pluck or isolate one leaf</strong>
+                        <p>Choose a leaf that clearly shows the symptoms you're concerned about</p>
+                    </div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">2</div>
+                    <div>
+                        <strong>Use a plain background</strong>
+                        <p>White paper, cardboard, or a table — anything without clutter</p>
+                    </div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">3</div>
+                    <div>
+                        <strong>Fill the frame</strong>
+                        <p>Get close so the leaf takes up most of the photo</p>
+                    </div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">4</div>
+                    <div>
+                        <strong>Even lighting, no shadows</strong>
+                        <p>Natural daylight works best — avoid harsh direct sun or dark indoor lighting</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="photo-guide-note">
+                <i class="fas fa-leaf"></i>
+                Following these steps helps the AI match the conditions it was trained on, significantly improving diagnosis accuracy.
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSection" class="loading-section" style="display:none">
+        <div class="spinner-wrap">
+            <div class="spinner"></div>
+            <div class="spinner-inner"></div>
+        </div>
+        <p class="loading-text">Analyzing your leaf image...</p>
+        <p class="loading-sub">Our AI model is examining the leaf for diseases</p>
+        <div class="loading-steps">
+            <div class="load-step active" id="ls1"><i class="fas fa-image"></i> Processing image</div>
+            <div class="load-step" id="ls2"><i class="fas fa-brain"></i> Running AI model</div>
+            <div class="load-step" id="ls3"><i class="fas fa-clipboard-check"></i> Generating report</div>
+        </div>
+    </div>
+
+    <!-- Result Section -->
+    <div id="resultSection" style="display:none">
+
+        <!-- Result Card -->
+        <div class="result-header-row">
+            <h2 class="section-title-sm"><i class="fas fa-clipboard-list"></i> Detection Result</h2>
+            <button class="btn btn-outline btn-sm" onclick="resetDetection()">
+                <i class="fas fa-upload"></i> Upload Different Image
+            </button>
+        </div>
+
+        <!-- Low Confidence Warning -->
+        <div class="confidence-warning card" id="confidenceWarning" style="display:none">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <strong>Lower confidence result</strong>
+                <p>For more accurate results, try photographing the leaf against a plain background. <a href="javascript:void(0)" onclick="resetDetection(); setTimeout(()=>togglePhotoGuide(), 300)">View photo tips</a></p>
+            </div>
+        </div>
+
+        <div class="result-card card">
+            <div class="result-image-col">
+                <img id="resultImg" src="" alt="Analyzed Leaf" class="result-image">
+                <div class="result-badge" id="resultBadge"></div>
+            </div>
+            <div class="result-info-col">
+                <div class="result-plant">
+                    <i class="fas fa-leaf"></i>
+                    <span id="resultPlant">Plant Name</span>
+                </div>
+                <h2 class="result-disease" id="resultDisease">Disease Name</h2>
+                <div class="result-conf-label">Confidence Level</div>
+                <div class="confidence-wrap">
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confFill"></div>
+                    </div>
+                    <span class="confidence-val" id="confVal">0%</span>
+                </div>
+                <div class="result-severity" id="resultSeverity"></div>
+                <div class="result-desc" id="resultDesc"></div>
+            </div>
+        </div>
+
+        <!-- Disease Info -->
+        <div class="disease-info-grid">
+
+            <div class="info-card card">
+                <h3 class="info-card-title"><i class="fas fa-exclamation-triangle" style="color:#f59e0b"></i> Symptoms</h3>
+                <ul class="info-list" id="symptomsList"></ul>
+            </div>
+
+            <div class="info-card card">
+                <h3 class="info-card-title"><i class="fas fa-virus" style="color:#ef4444"></i> Causes</h3>
+                <ul class="info-list" id="causesList"></ul>
+            </div>
+
+            <div class="info-card card">
+                <h3 class="info-card-title"><i class="fas fa-shield-alt" style="color:#22c55e"></i> Prevention</h3>
+                <ol class="info-list numbered" id="preventionList"></ol>
+            </div>
+        </div>
+
+        <!-- Treatment Section -->
+        <div class="treatment-section">
+            <h3 class="treatment-title"><i class="fas fa-pills"></i> Treatment Recommendations</h3>
+            <div class="treatment-grid">
+                <div class="treatment-card organic card">
+                    <h4><i class="fas fa-seedling"></i> Organic Treatment</h4>
+                    <ul id="organicList"></ul>
+                </div>
+                <div class="treatment-card chemical card">
+                    <h4><i class="fas fa-flask"></i> Chemical Treatment</h4>
+                    <ul id="chemicalList"></ul>
+                </div>
+                <div class="treatment-card recovery card">
+                    <h4><i class="fas fa-heartbeat"></i> Recovery Tips</h4>
+                    <ul id="recoveryList"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <button class="btn btn-primary" onclick="resetDetection()">
+                <i class="fas fa-redo"></i> Analyze Another Leaf
+            </button>
+            <a href="/history" class="btn btn-outline">
+                <i class="fas fa-history"></i> View History
+            </a>
+            <a href="/assistant" class="btn btn-outline">
+                <i class="fas fa-robot"></i> Ask AI Assistant
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/detection.js') }}"></script>
+{% endblock %}

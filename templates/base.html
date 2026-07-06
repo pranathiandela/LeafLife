@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LeafLife - Smart Crop Disease Detection{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,ta,kn,mr,gu,pa,bn,ml,or',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <style>
+        /* Hide default Google Translate bar */
+        .goog-te-banner-frame, .skiptranslate { display: none !important; }
+        body { top: 0 !important; }
+        .goog-te-gadget { display: none !important; }
+        /* Active language highlight */
+        .lang-option.active { background: var(--green-50); color: var(--green-700); font-weight: 600; }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Hidden Google Translate widget -->
+    <div id="google_translate_element" style="display:none"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M16 2C8 2 4 10 4 16C4 18 5 22 8 24C10 14 16 10 28 10C24 4 20 2 16 2Z" fill="#22c55e"/>
+                        <path d="M8 24C10 28 13 30 16 30C20 30 24 27 26 23C18 23 12 20 8 24Z" fill="#16a34a"/>
+                        <path d="M16 10C10 14 8 20 8 24C12 20 18 23 26 23C28 21 28 18 28 16C28 12 24 10 20 10C18 10 17 10 16 10Z" fill="#4ade80"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Leaf<span>Life</span></span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/detection" class="nav-link {% if request.path == '/detection' %}active{% endif %}"><i class="fas fa-microscope"></i> Detection</a></li>
+                <li><a href="/dashboard" class="nav-link {% if request.path == '/dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}"><i class="fas fa-history"></i> History</a></li>
+                <li><a href="/assistant" class="nav-link {% if request.path == '/assistant' %}active{% endif %}"><i class="fas fa-robot"></i> AI Assistant</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <div class="lang-selector" id="langSelector">
+                    <button class="lang-btn" onclick="toggleLangMenu()">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLang">English</span>
+                        <i class="fas fa-chevron-down" id="langChevron"></i>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown">
+                        <div class="lang-option active" onclick="setLang('en', 'English')">🇮🇳 English</div>
+                        <div class="lang-option" onclick="setLang('hi', 'हिंदी')">🇮🇳 हिंदी (Hindi)</div>
+                        <div class="lang-option" onclick="setLang('te', 'తెలుగు')">🇮🇳 తెలుగు (Telugu)</div>
+                        <div class="lang-option" onclick="setLang('ta', 'தமிழ்')">🇮🇳 தமிழ் (Tamil)</div>
+                        <div class="lang-option" onclick="setLang('kn', 'ಕನ್ನಡ')">🇮🇳 ಕನ್ನಡ (Kannada)</div>
+                        <div class="lang-option" onclick="setLang('mr', 'मराठी')">🇮🇳 मराठी (Marathi)</div>
+                        <div class="lang-option" onclick="setLang('gu', 'ગુજરાતી')">🇮🇳 ગુજરાતી (Gujarati)</div>
+                        <div class="lang-option" onclick="setLang('pa', 'ਪੰਜਾਬੀ')">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</div>
+                        <div class="lang-option" onclick="setLang('bn', 'বাংলা')">🇮🇳 বাংলা (Bengali)</div>
+                        <div class="lang-option" onclick="setLang('ml', 'മലയാളം')">🇮🇳 മലയാളം (Malayalam)</div>
+                        <div class="lang-option" onclick="setLang('or', 'ଓଡ଼ିଆ')">🇮🇳 ଓଡ଼ିଆ (Odia)</div>
+                    </div>
+                </div>
+                <div class="nav-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <button class="nav-hamburger" id="hamburger" onclick="toggleNav()">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="page-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

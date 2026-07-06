@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}History - LeafLife{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div class="container">
+        <h1><i class="fas fa-history"></i> Detection History</h1>
+        <p>All your previous crop disease detections in one place</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Filters -->
+    <div class="history-filters card">
+        <div class="filter-group">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by plant or disease..." onkeyup="filterHistory()">
+            </div>
+        </div>
+        <div class="filter-group">
+            <select id="plantFilter" onchange="filterHistory()" class="filter-select">
+                <option value="">All Plants</option>
+                {% set plants = records | map(attribute='plant_name') | unique | list %}
+                {% for plant in plants %}
+                <option value="{{ plant }}">{{ plant }}</option>
+                {% endfor %}
+            </select>
+            <select id="severityFilter" onchange="filterHistory()" class="filter-select">
+                <option value="">All Severity</option>
+                <option value="High">High Risk</option>
+                <option value="Medium">Medium Risk</option>
+                <option value="None">Healthy</option>
+            </select>
+            <select id="sortFilter" onchange="filterHistory()" class="filter-select">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="confidence">By Confidence</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <span class="record-count" id="recordCount">{{ records|length }} records</span>
+        </div>
+    </div>
+
+    {% if records %}
+    <!-- Table -->
+    <div class="history-table-wrap card">
+        <table class="history-table" id="historyTable">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Plant Name</th>
+                    <th>Disease</th>
+                    <th>Confidence</th>
+                    <th>Severity</th>
+                    <th>Date & Time</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody">
+                {% for r in records %}
+                <tr class="history-row" 
+                    data-plant="{{ r.plant_name }}" 
+                    data-disease="{{ r.disease_name }}"
+                    data-severity="{{ r.severity }}"
+                    data-confidence="{{ r.confidence }}"
+                    data-date="{{ r.analyzed_at }}">
+                    <td>
+                        {% if r.image_path %}
+                        <img src="{{ url_for('static', filename=r.image_path) }}" class="history-thumb" alt="leaf" onerror="this.src='/static/images/placeholder.png'">
+                        {% else %}
+                        <div class="history-thumb-placeholder"><i class="fas fa-leaf"></i></div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="history-plant">
+                            <i class="fas fa-seedling"></i>
+                            {{ r.plant_name }}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="history-disease">{{ r.disease_name }}</span>
+                    </td>
+                    <td>
+                        <div class="mini-conf-wrap">
+                            <div class="mini-conf-bar">
+                                <div class="mini-conf-fill {% if r.confidence >= 85 %}high{% elif r.confidence >= 60 %}med{% else %}low{% endif %}" style="width:{{ r.confidence }}%"></div>
+                            </div>
+                            <span class="mini-conf-val">{{ r.confidence }}%</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="severity-badge severity-{{ r.severity | lower }}">
+                            {% if r.severity == 'High' %}<i class="fas fa-exclamation-circle"></i>
+                            {% elif r.severity == 'Medium' %}<i class="fas fa-exclamation-triangle"></i>
+                            {% elif r.severity == 'None' %}<i class="fas fa-check-circle"></i>
+                            {% else %}<i class="fas fa-info-circle"></i>{% endif %}
+                            {{ r.severity }} Risk
+                        </span>
+                    </td>
+                    <td>
+                        <div class="history-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ r.analyzed_at[:10] if r.analyzed_at else 'N/A' }}
+                        </div>
+                        <div class="history-time">
+                            <i class="fas fa-clock"></i>
+                            {{ r.analyzed_at[11:16] if r.analyzed_at and r.analyzed_at|length > 10 else '' }}
+                        </div>
+                    </td>
+                    <td>
+                        <p class="history-desc">{{ (r.description or '')[:80] }}{% if r.description and r.description|length > 80 %}...{% endif %}</p>
+                    </td>
+                    <td>
+                        <div class="history-actions">
+                            <button class="icon-btn view-btn" title="View Details" onclick="viewRecord({{ r.id }}, '{{ r.plant_name }}', '{{ r.disease_name }}', {{ r.confidence }}, '{{ r.severity }}', '{{ (r.description or '') | replace("'","\'") }}', '{{ r.image_path or "" }}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="icon-btn delete-btn" title="Delete" onclick="deleteRecord({{ r.id }}, this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    {% else %}
+    <div class="empty-state card">
+        <div class="empty-icon"><i class="fas fa-folder-open"></i></div>
+        <h3>No Detection History Yet</h3>
+        <p>Start analyzing crop leaf images to build your detection history.</p>
+        <a href="/detection" class="btn btn-primary"><i class="fas fa-camera"></i> Start Detection</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- View Modal -->
+<div class="modal-overlay" id="viewModal" onclick="closeModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        <div class="modal-body">
+            <div class="modal-image-col">
+                <img id="modalImg" src="" alt="Leaf" onerror="this.style.display='none'">
+            </div>
+            <div class="modal-info-col">
+                <div class="modal-plant" id="modalPlant"></div>
+                <h2 class="modal-disease" id="modalDisease"></h2>
+                <div class="modal-conf-row">
+                    <span>Confidence:</span>
+                    <strong id="modalConf"></strong>
+                </div>
+                <div id="modalSeverity"></div>
+                <p class="modal-desc" id="modalDesc"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}

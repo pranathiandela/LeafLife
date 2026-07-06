@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block title %}LeafLife - Smart Crop Disease Detection System{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg">
+        <div class="hero-blob hero-blob-1"></div>
+        <div class="hero-blob hero-blob-2"></div>
+    </div>
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-leaf"></i>
+                <span>AI-Powered Plant Health Platform</span>
+            </div>
+            <h1 class="hero-title">
+                Welcome to<br>
+                <span class="brand-highlight">LeafLife</span>
+            </h1>
+            <p class="hero-tagline">Smart Crop Leaf Disease Identification System</p>
+            <p class="hero-desc">
+                Protect your harvest with instant AI disease detection. Upload a leaf photo and get accurate diagnosis, treatment plans, and expert guidance in seconds.
+            </p>
+            <div class="hero-subtitle">Healthy Leaves. Better Harvests. A Healthier Tomorrow.</div>
+            <div class="hero-actions">
+                <a href="/detection" class="btn btn-primary btn-lg">
+                    <i class="fas fa-camera"></i>
+                    Let's Get Started
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="/dashboard" class="btn btn-outline btn-lg">
+                    <i class="fas fa-chart-bar"></i>
+                    View Dashboard
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="stat-number">38+</span>
+                    <span class="stat-label">Diseases Detected</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Crop Types</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-image-frame">
+                <div class="leaf-animation">
+                    <svg class="leaf-svg" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="leafGrad" cx="50%" cy="40%" r="60%">
+                                <stop offset="0%" stop-color="#4ade80"/>
+                                <stop offset="100%" stop-color="#15803d"/>
+                            </radialGradient>
+                        </defs>
+                        <ellipse cx="150" cy="150" rx="100" ry="130" fill="url(#leafGrad)" transform="rotate(-15 150 150)"/>
+                        <path d="M150 280 Q150 150 150 20" stroke="#166534" stroke-width="3" fill="none"/>
+                        <path d="M150 200 Q110 160 90 120" stroke="#166534" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+                        <path d="M150 200 Q190 160 210 120" stroke="#166534" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+                        <path d="M150 160 Q120 130 105 100" stroke="#166534" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
+                        <path d="M150 160 Q180 130 195 100" stroke="#166534" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
+                        <circle cx="110" cy="95" r="6" fill="#fbbf24" opacity="0.8" class="disease-dot"/>
+                        <circle cx="185" cy="110" r="4" fill="#ef4444" opacity="0.8" class="disease-dot"/>
+                        <circle cx="130" cy="155" r="5" fill="#f97316" opacity="0.8" class="disease-dot"/>
+                    </svg>
+                </div>
+                <div class="detection-card floating">
+                    <div class="det-card-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="det-card-content">
+                        <div class="det-card-title">Disease Detected</div>
+                        <div class="det-card-value">Early Blight</div>
+                        <div class="det-card-conf">Confidence: 92%</div>
+                    </div>
+                </div>
+                <div class="scan-ring"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">What We Offer</span>
+            <h2 class="section-title">Everything You Need for Crop Health</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card" onclick="location.href='/detection'">
+                <div class="feature-icon-wrap" style="--c: #22c55e">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI Disease Detection</h3>
+                <p>Identify 38+ crop diseases instantly using deep learning trained on the PlantVillage dataset with 95% accuracy.</p>
+                <a href="/detection" class="feature-link">Detect Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" onclick="location.href='/detection'">
+                <div class="feature-icon-wrap" style="--c: #3b82f6">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Instant Analysis</h3>
+                <p>Get accurate disease diagnosis within seconds. Our model processes your leaf image and returns results in real-time.</p>
+                <a href="/detection" class="feature-link">Try Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" onclick="location.href='/history'">
+                <div class="feature-icon-wrap" style="--c: #f59e0b">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>Disease History</h3>
+                <p>Track all your past detections, monitor disease trends, and keep a complete history of your field health records.</p>
+                <a href="/history" class="feature-link">View History <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" onclick="location.href='/detection'">
+                <div class="feature-icon-wrap" style="--c: #8b5cf6">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                </div>
+                <h3>Smart Recommendations</h3>
+                <p>Get personalized organic and chemical treatment plans, prevention tips, and recovery strategies for each disease.</p>
+                <a href="/detection" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" onclick="location.href='/assistant'">
+                <div class="feature-icon-wrap" style="--c: #ec4899">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI Crop Assistant</h3>
+                <p>Chat with our AI expert about any crop question — diseases, farming tips, weather advice, and government schemes.</p>
+                <a href="/assistant" class="feature-link">Chat Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" onclick="location.href='/dashboard'">
+                <div class="feature-icon-wrap" style="--c: #14b8a6">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3>Analytics Dashboard</h3>
+                <p>Visualize disease distribution, track weekly scan activity, and get insights about your crop health over time.</p>
+                <a href="/dashboard" class="feature-link">View Dashboard <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Crops -->
+<section class="crops-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">Supported Crops</span>
+            <h2 class="section-title">15+ Crops, 38+ Diseases Covered</h2>
+        </div>
+        <div class="crops-scroll">
+            {% set crops = [
+                ('🍅','Tomato','10 diseases'),('🥔','Potato','3 diseases'),('🌽','Maize','4 diseases'),
+                ('🌾','Rice','5 diseases'),('🌾','Wheat','4 diseases'),('🥭','Mango','3 diseases'),
+                ('🌶️','Chilli','4 diseases'),('🍆','Brinjal','3 diseases'),('🥜','Groundnut','3 diseases'),
+                ('🌿','Cotton','3 diseases'),('🍇','Grape','4 diseases'),('🍎','Apple','4 diseases'),
+                ('🍑','Peach','2 diseases'),('🍓','Strawberry','2 diseases'),('🫑','Pepper','2 diseases')
+            ] %}
+            {% for emoji, name, count in crops %}
+            <div class="crop-chip">
+                <span class="crop-emoji">{{ emoji }}</span>
+                <div>
+                    <div class="crop-name">{{ name }}</div>
+                    <div class="crop-count">{{ count }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">How It Works</span>
+            <h2 class="section-title">Three Simple Steps to Protect Your Crops</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <div class="step-icon"><i class="fas fa-camera"></i></div>
+                <h3>Upload Leaf Photo</h3>
+                <p>Take a clear photo of the affected leaf and upload it to our platform. Supports JPG, PNG, JPEG formats.</p>
+            </div>
+            <div class="step-connector"><i class="fas fa-arrow-right"></i></div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <div class="step-icon"><i class="fas fa-cogs"></i></div>
+                <h3>AI Analysis</h3>
+                <p>Our deep learning model analyzes the image using CNN trained on 87,000+ plant disease images.</p>
+            </div>
+            <div class="step-connector"><i class="fas fa-arrow-right"></i></div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <div class="step-icon"><i class="fas fa-notes-medical"></i></div>
+                <h3>Get Treatment Plan</h3>
+                <p>Receive detailed disease information, causes, prevention tips, and both organic & chemical treatments.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <div class="cta-content">
+                <h2>Start Protecting Your Crops Today</h2>
+                <p>Join thousands of farmers using AI to detect and prevent crop diseases before they spread.</p>
+                <a href="/detection" class="btn btn-white btn-lg">
+                    <i class="fas fa-leaf"></i>
+                    Detect Disease Now
+                </a>
+            </div>
+            <div class="cta-visual">
+                <i class="fas fa-seedling cta-icon"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
