@@ -1,10 +1,10 @@
-# 🌿 LeafLife — Smart Crop Disease Identification System
+#  LeafLife — Smart Crop Disease Identification System
 
 A full-stack AI-powered web application for detecting crop leaf diseases using deep learning (TensorFlow/Keras + OpenCV), built with Flask, SQLite, and an AI chat assistant powered by Claude.
 
 ---
 
-## 🚀 Quick Start
+
 
 ### 1. Install Python dependencies
 
@@ -12,17 +12,17 @@ A full-stack AI-powered web application for detecting crop leaf diseases using d
 pip install -r requirements.txt
 ```
 
-### 2. Set your Anthropic API key
+### 2. Set your Gemini API key
 
 ```bash
 # Linux/macOS
-export ANTHROPIC_API_KEY=your_api_key_here
+export GEMINI_API_KEY=your_api_key_here
 
 # Windows CMD
-set ANTHROPIC_API_KEY=your_api_key_here
+set GEMINI_API_KEY=your_api_key_here
 
 # Windows PowerShell
-$env:ANTHROPIC_API_KEY="your_api_key_here"
+$env:GEMINI_API_KEY="your_api_key_here"
 ```
 
 Get your API key from: https://console.anthropic.com
@@ -37,9 +37,7 @@ Then open: http://localhost:5000
 
 ---
 
-## 🤖 AI Model Setup (Optional for Training)
-
-The app runs in **demo mode** without a trained model, but for real predictions:
+## AI Model Setup 
 
 ### Download PlantVillage Dataset
 
@@ -75,7 +73,7 @@ python model/train_model.py --predict path/to/leaf_image.jpg
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 leaflife/
@@ -107,7 +105,7 @@ leaflife/
 
 ---
 
-## 🌾 Supported Crops & Diseases
+##  Supported Crops & Diseases
 
 | Crop       | Diseases Covered                                      |
 |------------|-------------------------------------------------------|
@@ -129,7 +127,7 @@ leaflife/
 
 ---
 
-## 🖥️ Pages
+##  Pages
 
 | Page         | URL          | Description                                   |
 |--------------|--------------|-----------------------------------------------|
@@ -141,7 +139,7 @@ leaflife/
 
 ---
 
-## 🌐 Language Support
+##  Language Support
 
 The navbar includes an Indian language selector supporting:
 - English, हिंदी (Hindi), తెలుగు (Telugu), தமிழ் (Tamil)
@@ -150,7 +148,7 @@ The navbar includes an Indian language selector supporting:
 
 ---
 
-## 🔧 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint                      | Description                  |
 |--------|-------------------------------|------------------------------|
@@ -161,12 +159,12 @@ The navbar includes an Indian language selector supporting:
 
 ---
 
-## ⚙️ Technology Stack
+## Technology Stack
 
 - **Backend**: Python 3.10+, Flask 3.0
 - **ML/AI**: TensorFlow 2.16, Keras, MobileNetV2, OpenCV
 - **Database**: SQLite (via sqlite3)
-- **AI Chat**: Anthropic Claude API
+- **AI Chat**: Gemini API
 - **Frontend**: HTML5, CSS3 (custom design system), Vanilla JS
 - **Charts**: Chart.js 4
 - **Icons**: Font Awesome 6
@@ -174,9 +172,9 @@ The navbar includes an Indian language selector supporting:
 
 ---
 
-## 📝 Notes
+##  Notes
 
 - The app runs in **demo mode** if no trained model is found (`model/plant_disease_model.h5`).
 - In demo mode, predictions are simulated for demonstration purposes.
 - Place your trained `.h5` model file in the `model/` directory for real predictions.
-- The AI Assistant requires a valid `ANTHROPIC_API_KEY` environment variable.
+- The AI Assistant requires a valid `GEMINI_API_KEY` environment variable.
